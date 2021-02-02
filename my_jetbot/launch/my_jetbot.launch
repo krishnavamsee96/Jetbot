@@ -2,9 +2,9 @@
 
 <launch>
     <!-- This is only for the REAL robot. This is the driver that interfaces with the ROS topics and the hardware-->
-    <node   name="Jetbot_wheels_node"
+    <node   name="Jetbot_control_node"
             pkg="my_jetbot"
-            type="jetbot_wheels.py"
+            type="jetbot_control.py"
             respawn="false"
             output="screen"
             args="">
