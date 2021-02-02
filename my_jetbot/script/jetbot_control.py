@@ -56,8 +56,8 @@ def on_cmd_str(msg):
 		set_speed(motor_left_ID, 1.0)
 	elif msg.data.lower() == "stop":
 		all_stop()
- 	else:
- 		rospy.logerror(rospy.get_caller_id() + ' invalid cmd_str=%s', msg.data)
+	else:
+		rospy.logerror(rospy.get_caller_id() + ' invalid cmd_str=%s', msg.data)
 # initialization
 if __name__ == '__main__':
  	# setup motor controller
