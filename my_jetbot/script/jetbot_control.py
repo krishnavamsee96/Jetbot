@@ -1,62 +1,61 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
 import time
 from Adafruit_MotorHAT import Adafruit_MotorHAT
 from std_msgs.msg import String
 # sets motor speed between [-1.0, 1.0]
 def set_speed(motor_ID, value):
- 	max_pwm = 115.0
- 	speed = int(min(max(abs(value * max_pwm), 0), max_pwm))
- 	if motor_ID == 1:
- 		motor = motor_left
- 	elif motor_ID == 2:
- 		motor = motor_right
- 	else:
- 		rospy.logerror('set_speed(%d, %f) -> invalid motor_ID=%d', motor_ID, value, motor_ID)
- 	return
-
- 	motor.setSpeed(speed)
- 	if value > 0:
- 		motor.run(Adafruit_MotorHAT.FORWARD)
- 	else:
- 		motor.run(Adafruit_MotorHAT.BACKWARD)
+	max_pwm = 115.0
+	speed = int(min(max(abs(value * max_pwm), 0), max_pwm))
+	if motor_ID == 1:
+		motor = motor_left
+	elif motor_ID == 2:
+		motor = motor_right
+	else:
+		rospy.logerror('set_speed(%d, %f) -> invalid motor_ID=%d', motor_ID, value, motor_ID)
+	return
+motor.setSpeed(speed)
+if value > 0:
+	motor.run(Adafruit_MotorHAT.FORWARD)
+else:
+	motor.run(Adafruit_MotorHAT.BACKWARD)
 # stops all motors
 def all_stop():
- 	motor_left.setSpeed(0)
- 	motor_right.setSpeed(0)
- 	motor_left.run(Adafruit_MotorHAT.RELEASE)
- 	motor_right.run(Adafruit_MotorHAT.RELEASE)
+	motor_left.setSpeed(0)
+	motor_right.setSpeed(0)
+	motor_left.run(Adafruit_MotorHAT.RELEASE)
+	motor_right.run(Adafruit_MotorHAT.RELEASE)
 # directional commands (degree, speed)
 def on_cmd_dir(msg):
- 	rospy.loginfo(rospy.get_caller_id() + ' cmd_dir=%s', msg.data)
+	rospy.loginfo(rospy.get_caller_id() + ' cmd_dir=%s', msg.data)
 # raw L/R motor commands (speed, speed)
 def on_cmd_raw(msg):
- 	rospy.loginfo(rospy.get_caller_id() + ' cmd_raw=%s', msg.data)
+	rospy.loginfo(rospy.get_caller_id() + ' cmd_raw=%s', msg.data)
 # simple string commands (left/right/forward/backward/stop)
 def on_cmd_str(msg):
- 	rospy.loginfo(rospy.get_caller_id() + ' cmd_str=%s', msg.data)
- 	if msg.data.lower() == "circle-lhs":
- 		set_speed(motor_left_ID, 0)
- 		set_speed(motor_right_ID, 1.0)
- 	elif msg.data.lower() == "circle-rhs":
- 		set_speed(motor_left_ID, 1.0)
- 		set_speed(motor_right_ID, 0)
+	rospy.loginfo(rospy.get_caller_id() + ' cmd_str=%s', msg.data)
+	if msg.data.lower() == "circle-lhs":
+		set_speed(motor_left_ID, 0)
+		set_speed(motor_right_ID, 1.0)
+	elif msg.data.lower() == "circle-rhs":
+		set_speed(motor_left_ID, 1.0)
+		set_speed(motor_right_ID, 0)
 	elif msg.data.lower() == "square":
- 		set_speed(motor_left_ID, 1.0)
- 		set_speed(motor_right_ID, 1.0)
- 		set_speed(motor_left_ID, 1.0)
- 		set_speed(motor_right_ID, -1.0)
- 		set_speed(motor_left_ID, 1.0)
- 		set_speed(motor_right_ID, 1.0)
- 		set_speed(motor_left_ID, 1.0)
- 		set_speed(motor_right_ID, -1.0)
- 		set_speed(motor_left_ID, 1.0)
- 		set_speed(motor_right_ID, 1.0)
- 		set_speed(motor_left_ID, 1.0)
+		set_speed(motor_left_ID, 1.0)
+		set_speed(motor_right_ID, 1.0)
+		set_speed(motor_left_ID, 1.0)
 		set_speed(motor_right_ID, -1.0)
 		set_speed(motor_left_ID, 1.0)
- 	elif msg.data.lower() == "stop":
- 		all_stop()
+		set_speed(motor_right_ID, 1.0)
+		set_speed(motor_left_ID, 1.0)
+		set_speed(motor_right_ID, -1.0)
+		set_speed(motor_left_ID, 1.0)
+		set_speed(motor_right_ID, 1.0)
+		set_speed(motor_left_ID, 1.0)
+		set_speed(motor_right_ID, -1.0)
+		set_speed(motor_left_ID, 1.0)
+	elif msg.data.lower() == "stop":
+		all_stop()
  	else:
  		rospy.logerror(rospy.get_caller_id() + ' invalid cmd_str=%s', msg.data)
 # initialization
